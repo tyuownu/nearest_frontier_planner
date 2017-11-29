@@ -15,6 +15,7 @@ using namespace ros;
 using namespace tf;
 
 RobotNavigator::RobotNavigator()
+  : move_client_("move_base", true)
 {	
 	NodeHandle robotNode;
 
@@ -93,6 +94,7 @@ RobotNavigator::RobotNavigator()
 	mIsPaused = false;
 	mStatus = NAV_ST_IDLE;
 	mCellInflationRadius = 0;
+  goal_publisher_ = robotNode.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 2);
 }
 
 RobotNavigator::~RobotNavigator()
@@ -791,6 +793,9 @@ void RobotNavigator::receiveMoveGoal(const nearest_frontier_planner::MoveToPosit
 
 void RobotNavigator::receiveExploreGoal(const nearest_frontier_planner::ExploreGoal::ConstPtr &goal)
 {
+//  if ( !move_client_.waitForServer() ) {
+//    return;
+//  }
 	if(mStatus != NAV_ST_IDLE)
 	{
 		ROS_WARN("Navigator is busy!");
@@ -846,6 +851,27 @@ void RobotNavigator::receiveExploreGoal(const nearest_frontier_planner::ExploreG
 				unsigned int x_index = 0, y_index = 0;
 				mCurrentMap.getCoordinates(x_index, y_index, mStartPoint);
 				ROS_INFO("start: x = %u, y = %u", x_index, y_index);
+        unsigned int x_stop = 0, y_stop = 0;
+
+        mCurrentMap.getCoordinates(x_stop, y_stop, mGoalPoint);
+
+        double x_ = x_index * mCurrentMap.getResolution() + mCurrentMap.getOriginX();
+        double y_ = y_index * mCurrentMap.getResolution() + mCurrentMap.getOriginY();
+        ROS_INFO("start: x = %f, y = %f", x_, y_);
+
+        double x = x_stop * mCurrentMap.getResolution() + mCurrentMap.getOriginX();
+        double y = y_stop * mCurrentMap.getResolution() + mCurrentMap.getOriginY();
+        ROS_INFO("goal: x = %f, y = %f", x, y);
+
+        geometry_msgs::PoseStamped goal_base;
+        goal_base.header.stamp = ros::Time::now();
+        goal_base.header.frame_id = "map";
+        goal_base.pose.position.x = x;
+        goal_base.pose.position.y = y;
+        goal_base.pose.orientation = tf::createQuaternionMsgFromYaw(0);
+        goal_publisher_.publish(goal_base);
+//        move_client_goal_.target_pose = goal_base;
+//        move_client_.sendGoal(move_client_goal_);
 				switch(result)
 				{
 				case EXPL_TARGET_SET:
@@ -915,7 +941,7 @@ void RobotNavigator::receiveExploreGoal(const nearest_frontier_planner::ExploreG
 			}
 
 			// Create a new command and send it to Operator
-			generateCommand();
+			// generateCommand();
 		}
 		
 		// Sleep remaining time

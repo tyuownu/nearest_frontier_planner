@@ -3,6 +3,7 @@
 #include <std_srvs/Trigger.h>
 #include <tf/transform_listener.h>
 #include <actionlib/server/simple_action_server.h>
+#include <actionlib/client/simple_action_client.h>
 #include <pluginlib/class_loader.h>
 #include <nearest_frontier_planner/MoveToPosition2DAction.h>
 #include <nearest_frontier_planner/ExploreAction.h>
@@ -13,6 +14,8 @@
 #include <nearest_frontier_planner/commands.h>
 #include <nearest_frontier_planner/map_inflation_tool.h>
 #include <nearest_frontier_planner/exploration_planner.h>
+
+#include <move_base_msgs/MoveBaseAction.h>
 
 #include <queue>
 
@@ -103,4 +106,9 @@ private:
 	double mExplorationGoalDistance;
 	double mMinReplanningPeriod;
 	double mMaxReplanningPeriod;
+
+  actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> move_client_;
+  move_base_msgs::MoveBaseGoal move_client_goal_;
+
+  ros::Publisher goal_publisher_;
 };

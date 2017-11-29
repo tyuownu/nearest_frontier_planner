@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   nav2d_operator
   nav2d_msgs
+  move_base_msgs
 )
 
 ################################################
