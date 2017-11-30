@@ -95,10 +95,13 @@ void MapInflationTool::inflateMap(GridMap* map)
 			unsigned int sx, sy;
 			mGridMap->getCoordinates(sx, sy, index);
 			enqueueObstacle(index, sx, sy);
-		}else if(mGridMap->getData(index) == -1)
-		{
-			mInflationMarkers[index] = 1;
-		} 
+		}
+		/*
+		 *else if(mGridMap->getData(index) == -1)
+		 *{
+		 *  mInflationMarkers[index] = 1;
+		 *}
+		 */
 	}
 	
 	// 2. Inflate them by the given inflation radius
