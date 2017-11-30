@@ -1,10 +1,10 @@
 <launch>
 
-  <rosparam file="$(find nav2d_tutorials)/param/ros.yaml" />
+  <rosparam file="$(find nearest_frontier_planner)/param/ros.yaml" />
 
 	<!-- Start the Navigator to move the robot autonomously -->
 	<node name="Navigator" pkg="nearest_frontier_planner" type="nfp_navigator">
-		<rosparam file="$(find nav2d_tutorials)/param/navigator.yaml"/>
+		<rosparam file="$(find nearest_frontier_planner)/param/navigator.yaml"/>
 	</node>
 
 	<node name="GetMap" pkg="nearest_frontier_planner" type="nfp_get_map_client" />
