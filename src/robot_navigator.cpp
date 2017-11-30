@@ -9,7 +9,7 @@
 #include <map>
 
 #define PI 3.14159265
-#define FREQUENCY 5.0
+#define FREQUENCY 0.5
 
 using namespace ros;
 using namespace tf;
