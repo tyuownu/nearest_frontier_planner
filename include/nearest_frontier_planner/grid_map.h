@@ -44,7 +44,7 @@ class GridMap {
     x = i % mMapWidth;
     return true;
   }
-  
+
   // Index based methods
   signed char getData(unsigned int index) {
     if ( index < mMapWidth * mMapHeight )
@@ -52,7 +52,7 @@ class GridMap {
     else
       return -1;
   }
-  
+
   bool setData(unsigned int index, signed char value) {
     if ( index >= mMapWidth * mMapHeight ) {
       return false;
@@ -83,11 +83,11 @@ class GridMap {
     return false;
   }
 
-  /** Gets indices of all free neighboring cells with given offset */ 
+  /** Gets indices of all free neighboring cells with given offset */
   std::vector<unsigned int> getFreeNeighbors(unsigned int index,
       int offset = 1) {
     std::vector<unsigned int> neighbors;
-    
+
     if ( offset < 0 ) offset *= -1;
     int y = index / mMapWidth;
     int x = index % mMapWidth;
@@ -96,11 +96,11 @@ class GridMap {
       for ( int j = -offset; j <= offset; j++ )
         if ( getIndex(x+i, y+j, index) && isFree(index) )
           neighbors.push_back(index);
-          
+
     return neighbors;
   }
 
-  /** Gets indices of all neighboring cells */ 
+  /** Gets indices of all neighboring cells */
   std::vector<unsigned int> getNeighbors(unsigned int index,
       bool diagonal = false) {
     std::vector<unsigned int> neighbors;
@@ -108,16 +108,16 @@ class GridMap {
     int y = index / mMapWidth;
     int x = index % mMapWidth;
     unsigned int i;
-    if ( getIndex(x-1,y,  i) ) neighbors.push_back(i);
-    if ( getIndex(x+1,y,  i) ) neighbors.push_back(i);
-    if ( getIndex(x,  y-1,i) ) neighbors.push_back(i);
-    if ( getIndex(x,  y+1,i) ) neighbors.push_back(i);
+    if ( getIndex(x-1, y,   i) ) neighbors.push_back(i);
+    if ( getIndex(x+1, y,   i) ) neighbors.push_back(i);
+    if ( getIndex(x,   y-1, i) ) neighbors.push_back(i);
+    if ( getIndex(x,   y+1, i) ) neighbors.push_back(i);
 
     if ( diagonal ) {
-      if ( getIndex(x-1,y-1,i) ) neighbors.push_back(i);
-      if ( getIndex(x-1,y+1,i) ) neighbors.push_back(i);
-      if ( getIndex(x+1,y-1,i) ) neighbors.push_back(i);
-      if ( getIndex(x+1,y+1,i) ) neighbors.push_back(i);
+      if ( getIndex(x-1, y-1, i) ) neighbors.push_back(i);
+      if ( getIndex(x-1, y+1, i) ) neighbors.push_back(i);
+      if ( getIndex(x+1, y-1, i) ) neighbors.push_back(i);
+      if ( getIndex(x+1, y+1, i) ) neighbors.push_back(i);
     }
     return neighbors;
   }
@@ -143,6 +143,7 @@ class GridMap {
     if ( value >= 0 && value < mLethalCost ) return true;
     return false;
   }
+
  private:
   nav_msgs::OccupancyGrid mOccupancyGrid;
   unsigned int mMapWidth;
