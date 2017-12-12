@@ -7,9 +7,7 @@
 		<rosparam file="$(find nearest_frontier_planner)/param/navigator.yaml"/>
 	</node>
 
-	<node name="GetMap" pkg="nearest_frontier_planner" type="nfp_get_map_client" />
 	<node name="Explore" pkg="nearest_frontier_planner" type="nfp_explore_client" />
-	<node name="SetGoal" pkg="nearest_frontier_planner" type="nfp_set_goal_client" />
 
 
 </launch>
