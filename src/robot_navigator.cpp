@@ -102,7 +102,7 @@ void RobotNavigator::stop() {
 
 void RobotNavigator::receiveExploreGoal(
     const nearest_frontier_planner::ExploreGoal::ConstPtr &goal) {
-  ROS_INFO(__func__);
+  // ROS_INFO(__func__);
   Rate loopRate(FREQUENCY);
   while ( true ) {
     // Check if we are asked to preempt
@@ -170,7 +170,7 @@ bool RobotNavigator::isLocalized() {
 }
 
 bool RobotNavigator::setCurrentPosition() {
-  ROS_INFO(__func__);
+  // ROS_INFO(__func__);
   StampedTransform transform;
   try {
     mTfListener.lookupTransform(mMapFrame, mRobotFrame, Time(0), transform);
@@ -200,7 +200,7 @@ bool RobotNavigator::setCurrentPosition() {
 
 void RobotNavigator::mapCallback(const nav_msgs::OccupancyGrid& global_map) {
   if ( !mHasNewMap ) {
-  ROS_INFO(__func__);
+    // ROS_INFO(__func__);
     mCurrentMap.update(global_map);
     mCurrentMap.setLethalCost(50);
     mHasNewMap = true;
