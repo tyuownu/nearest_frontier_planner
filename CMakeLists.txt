@@ -55,7 +55,6 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 ## Declare a cpp library
-add_library(map_inflation_tool src/map_inflation_tool.cpp)
 add_library(robot_navigator src/robot_navigator.cpp)
 
 ## Declare a cpp executable
@@ -69,7 +68,6 @@ add_dependencies(nfp_navigator nav2d_navigator_generate_messages_cpp ${catkin_EX
 add_dependencies(nfp_explore_client nav2d_navigator_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(robot_navigator map_inflation_tool ${catkin_LIBRARIES})
 target_link_libraries(nfp_navigator robot_navigator ${catkin_LIBRARIES})
 target_link_libraries(nfp_explore_client ${catkin_LIBRARIES})
 
@@ -84,7 +82,6 @@ target_link_libraries(nfp_explore_client ${catkin_LIBRARIES})
 install(
   TARGETS
     robot_navigator
-    map_inflation_tool
     nfp_navigator
     nfp_explore_client
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

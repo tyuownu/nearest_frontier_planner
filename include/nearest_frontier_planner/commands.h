@@ -14,10 +14,4 @@
 #define NAV_GETMAP_ACTION     "GetFirstMap"
 #define NAV_LOCALIZE_ACTION   "Localize"
 
-#define NAV_ST_IDLE       0
-#define NAV_ST_NAVIGATING 1
-#define NAV_ST_EXPLORING  4
-#define NAV_ST_WAITING    5
-#define NAV_ST_RECOVERING 6
-
 #endif  // end NAVIGATOR_COMMANDS_H_

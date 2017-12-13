@@ -1,3 +1,0 @@
-# Inflation params used for path planning
-map_inflation_radius: 0.70
-robot_radius: 0.19
