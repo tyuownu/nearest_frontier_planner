@@ -4,7 +4,6 @@
 
 	<!-- Start the Navigator to move the robot autonomously -->
 	<node name="Navigator" pkg="nearest_frontier_planner" type="nfp_navigator">
-		<rosparam file="$(find nearest_frontier_planner)/param/navigator.yaml"/>
 	</node>
 
 	<node name="Explore" pkg="nearest_frontier_planner" type="nfp_explore_client" />
