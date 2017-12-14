@@ -121,6 +121,7 @@ void RobotNavigator::receiveExploreGoal(
       return;
     }
 
+    mGoalPoint = mCurrentMap.getSize();
     if ( preparePlan() ) {
       ROS_INFO("exploration: start = %u, end = %u.", mStartPoint, mGoalPoint);
       int result = mExplorationPlanner->findExplorationTarget(&mCurrentMap,
@@ -131,7 +132,6 @@ void RobotNavigator::receiveExploreGoal(
       ROS_INFO("start: x = %u, y = %u", x_index, y_index);
       unsigned int x_stop = 0, y_stop = 0;
 
-      mCurrentMap.getCoordinates(x_stop, y_stop, mGoalPoint);
 
       double x_ = x_index * mCurrentMap.getResolution() +
         mCurrentMap.getOriginX();
@@ -139,10 +139,19 @@ void RobotNavigator::receiveExploreGoal(
         mCurrentMap.getOriginY();
       ROS_INFO("start: x = %f, y = %f", x_, y_);
 
-      double x = x_stop * mCurrentMap.getResolution() +
-        mCurrentMap.getOriginX();
-      double y = y_stop * mCurrentMap.getResolution() +
-        mCurrentMap.getOriginY();
+      double x, y;
+      if ( mGoalPoint == mCurrentMap.getSize() ) {
+        x = (x_index+1) * mCurrentMap.getResolution() +
+          mCurrentMap.getOriginX();
+        y = y_index * mCurrentMap.getResolution() +
+          mCurrentMap.getOriginY();
+      } else {
+        mCurrentMap.getCoordinates(x_stop, y_stop, mGoalPoint);
+        x = (x_stop+1) * mCurrentMap.getResolution() +
+          mCurrentMap.getOriginX();
+        y = y_stop * mCurrentMap.getResolution() +
+          mCurrentMap.getOriginY();
+      }
       ROS_INFO("goal: x = %f, y = %f", x, y);
 
       geometry_msgs::PoseStamped goal_base;
