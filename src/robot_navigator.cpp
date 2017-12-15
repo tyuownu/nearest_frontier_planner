@@ -141,13 +141,13 @@ void RobotNavigator::receiveExploreGoal(
 
       double x, y;
       if ( mGoalPoint == mCurrentMap.getSize() ) {
-        x = (x_index+1) * mCurrentMap.getResolution() +
+        x = x_index * mCurrentMap.getResolution() +
           mCurrentMap.getOriginX();
         y = y_index * mCurrentMap.getResolution() +
           mCurrentMap.getOriginY();
       } else {
         mCurrentMap.getCoordinates(x_stop, y_stop, mGoalPoint);
-        x = (x_stop+1) * mCurrentMap.getResolution() +
+        x = x_stop * mCurrentMap.getResolution() +
           mCurrentMap.getOriginX();
         y = y_stop * mCurrentMap.getResolution() +
           mCurrentMap.getOriginY();
