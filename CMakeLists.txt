@@ -58,14 +58,14 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 add_library(robot_navigator src/robot_navigator.cpp)
 
 ## Declare a cpp executable
-add_executable(nfp_navigator src/navigator.cpp src/robot_navigator.cpp)
+add_executable(nfp_navigator src/navigator.cpp src/robot_navigator.cpp src/nearest_frontier_planner.cpp)
 add_executable(nfp_explore_client src/explore_client.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-add_dependencies(robot_navigator nav2d_navigator_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies(nfp_navigator nav2d_navigator_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies(nfp_explore_client nav2d_navigator_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(robot_navigator  ${catkin_EXPORTED_TARGETS})
+add_dependencies(nfp_navigator  ${catkin_EXPORTED_TARGETS})
+add_dependencies(nfp_explore_client ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(nfp_navigator robot_navigator ${catkin_LIBRARIES})

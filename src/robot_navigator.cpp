@@ -1,7 +1,6 @@
 #include <nav_msgs/GridCells.h>
 
 #include <nearest_frontier_planner/robot_navigator.h>
-#include <nearest_frontier_planner/exploration_planner.h>
 
 #include <set>
 #include <map>
@@ -34,20 +33,9 @@ RobotNavigator::RobotNavigator() {
   mRobotFrame = mTfListener.resolve(mRobotFrame);
   mMapFrame = mTfListener.resolve(mMapFrame);
 
-  try {
-    mPlanLoader = new PlanLoader("nav2d_navigator", "ExplorationPlanner");
-    mExplorationPlanner = mPlanLoader->createInstance(mExplorationStrategy);
-    ROS_INFO("Successfully loaded exploration strategy [%s].",
-        mExplorationStrategy.c_str());
-
-    mExploreActionServer = new ExploreActionServer(mExploreActionTopic,
-        boost::bind(&RobotNavigator::receiveExploreGoal, this, _1), false);
-    mExploreActionServer->start();
-  } catch ( pluginlib::PluginlibException& ex ) {
-    ROS_ERROR("Failed to load exploration plugin! Error: %s", ex.what());
-    mExploreActionServer = NULL;
-    mPlanLoader = NULL;
-  }
+  mExploreActionServer = new ExploreActionServer(mExploreActionTopic,
+      boost::bind(&RobotNavigator::receiveExploreGoal, this, _1), false);
+  mExploreActionServer->start();
 
   mHasNewMap = false;
   mIsStopped = false;
@@ -60,8 +48,6 @@ RobotNavigator::RobotNavigator() {
 
 RobotNavigator::~RobotNavigator() {
   delete mExploreActionServer;
-  mExplorationPlanner.reset();
-  delete mPlanLoader;
 }
 
 bool RobotNavigator::receiveStop(std_srvs::Trigger::Request &req,
@@ -124,7 +110,7 @@ void RobotNavigator::receiveExploreGoal(
     mGoalPoint = mCurrentMap.getSize();
     if ( preparePlan() ) {
       ROS_INFO("exploration: start = %u, end = %u.", mStartPoint, mGoalPoint);
-      int result = mExplorationPlanner->findExplorationTarget(&mCurrentMap,
+      int result = mExplorationPlanner.findExplorationTarget(&mCurrentMap,
           mStartPoint, mGoalPoint);
       ROS_INFO("exploration: start = %u, end = %u.", mStartPoint, mGoalPoint);
       unsigned int x_index = 0, y_index = 0;

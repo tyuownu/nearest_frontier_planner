@@ -10,13 +10,12 @@
 
 #include <nearest_frontier_planner/grid_map.h>
 #include <nearest_frontier_planner/commands.h>
-#include <nearest_frontier_planner/exploration_planner.h>
+#include <nearest_frontier_planner/nearest_frontier_planner.h>
 
 #include <move_base_msgs/MoveBaseAction.h>
 
 
 typedef actionlib::SimpleActionServer<nearest_frontier_planner::ExploreAction> ExploreActionServer;
-typedef pluginlib::ClassLoader<ExplorationPlanner> PlanLoader;
 
 class RobotNavigator
 {
@@ -49,8 +48,6 @@ class RobotNavigator
 
   ExploreActionServer* mExploreActionServer;
 
-  PlanLoader* mPlanLoader;
-
   // Current status and goals
   bool mHasNewMap;
   bool mIsPaused;
@@ -60,7 +57,7 @@ class RobotNavigator
 
   // Everything related to the global map and plan
   std::string mExplorationStrategy;
-  boost::shared_ptr<ExplorationPlanner> mExplorationPlanner;
+  NearestFrontierPlanner mExplorationPlanner;
   GridMap mCurrentMap;
 
   ros::Publisher goal_publisher_;
