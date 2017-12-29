@@ -7,69 +7,69 @@
 class GridMap {
  public:
   void update(nav_msgs::OccupancyGrid grid) {
-    mOccupancyGrid = grid;
-    mMapWidth = mOccupancyGrid.info.width;
-    mMapHeight = mOccupancyGrid.info.height;
-    ROS_DEBUG("Got new map of size %d x %d", mMapWidth, mMapHeight);
+    occupancy_grid_ = grid;
+    map_width_ = occupancy_grid_.info.width;
+    map_height_ = occupancy_grid_.info.height;
+    ROS_DEBUG("Got new map of size %d x %d", map_width_, map_height_);
   }
 
-  unsigned int getWidth() {return mMapWidth;}
-  unsigned int getHeight() {return mMapHeight;}
-  unsigned int getSize() {return mMapWidth * mMapHeight;}
-  double getResolution() {return mOccupancyGrid.info.resolution;}
-  double getOriginX() {return mOccupancyGrid.info.origin.position.x;}
-  double getOriginY() {return mOccupancyGrid.info.origin.position.y;}
+  unsigned int getWidth() {return map_width_;}
+  unsigned int getHeight() {return map_height_;}
+  unsigned int getSize() {return map_width_ * map_height_;}
+  double getResolution() {return occupancy_grid_.info.resolution;}
+  double getOriginX() {return occupancy_grid_.info.origin.position.x;}
+  double getOriginY() {return occupancy_grid_.info.origin.position.y;}
 
-  signed char getLethalCost() {return mLethalCost;}
-  void setLethalCost(signed char c) {mLethalCost = c;}
+  signed char getLethalCost() {return lethal_cost_;}
+  void setLethalCost(signed char c) {lethal_cost_ = c;}
 
-  const nav_msgs::OccupancyGrid& getMap() const {return mOccupancyGrid;}
+  const nav_msgs::OccupancyGrid& getMap() const {return occupancy_grid_;}
 
   // Get the array index from the given x,y coordinates
-  bool getIndex(unsigned int x, unsigned int y, unsigned int &i) {
-    if ( x >= mMapWidth || y >= mMapHeight ) {
+  bool getIndex(const unsigned int x, const unsigned int y, unsigned int &i) {
+    if ( x >= map_width_ || y >= map_height_ ) {
       return false;
     }
-    i = y * mMapWidth + x;
+    i = y * map_width_ + x;
     return true;
   }
   
   // Get the x,y coordinates from the given array index
-  bool getCoordinates(unsigned int &x, unsigned int &y, unsigned int i) {
-    if ( i >= mMapWidth * mMapHeight ) {
+  bool getCoordinates(unsigned int &x, unsigned int &y, const unsigned int i) {
+    if ( i >= map_width_ * map_height_ ) {
       ROS_ERROR("getCoords() failed!");
       return false;
     }
-    y = i / mMapWidth;
-    x = i % mMapWidth;
+    y = i / map_width_;
+    x = i % map_width_;
     return true;
   }
 
   // Index based methods
   signed char getData(unsigned int index) {
-    if ( index < mMapWidth * mMapHeight )
-      return mOccupancyGrid.data[index];
+    if ( index < map_width_ * map_height_ )
+      return occupancy_grid_.data[index];
     else
       return -1;
   }
 
   bool setData(unsigned int index, signed char value) {
-    if ( index >= mMapWidth * mMapHeight ) {
+    if ( index >= map_width_ * map_height_ ) {
       return false;
     }
-    mOccupancyGrid.data[index] = value;
+    occupancy_grid_.data[index] = value;
     return true;
   }
 
   bool isFree(unsigned int index) {
     signed char value = getData(index);
-    if ( value >= 0 && value < mLethalCost ) return true;
+    if ( value >= 0 && value < lethal_cost_ ) return true;
     return false;
   }
 
   bool isFrontier(unsigned int index) {
-    int y = index / mMapWidth;
-    int x = index % mMapWidth;
+    int y = index / map_width_;
+    int x = index % map_width_;
 
     if ( getData(x-1, y-1) == -1 ) return true;
     if ( getData(x-1, y  ) == -1 ) return true;
@@ -89,8 +89,8 @@ class GridMap {
     std::vector<unsigned int> neighbors;
 
     if ( offset < 0 ) offset *= -1;
-    int y = index / mMapWidth;
-    int x = index % mMapWidth;
+    int y = index / map_width_;
+    int x = index % map_width_;
 
     for ( int i = -offset; i <= offset; i++ )
       for ( int j = -offset; j <= offset; j++ )
@@ -105,8 +105,8 @@ class GridMap {
       bool diagonal = false) {
     std::vector<unsigned int> neighbors;
 
-    int y = index / mMapWidth;
-    int x = index % mMapWidth;
+    int y = index / map_width_;
+    int x = index % map_width_;
     unsigned int i;
     if ( getIndex(x-1, y,   i) ) neighbors.push_back(i);
     if ( getIndex(x+1, y,   i) ) neighbors.push_back(i);
@@ -124,31 +124,31 @@ class GridMap {
 
   // Coordinate based methods
   signed char getData(int x, int y) {
-    if ( x < 0 ||x >= (int)mMapWidth || y < 0 || y >= (int)mMapHeight )
+    if ( x < 0 ||x >= (int)map_width_ || y < 0 || y >= (int)map_height_ )
       return -1;
     else
-      return mOccupancyGrid.data[y*mMapWidth + x];
+      return occupancy_grid_.data[y*map_width_ + x];
   }
 
   bool setData(int x, int y, signed char value) {
-    if ( x < 0 ||x >= (int)mMapWidth || y < 0 || y >= (int)mMapHeight ) {
+    if ( x < 0 ||x >= (int)map_width_ || y < 0 || y >= (int)map_height_ ) {
       return false;
     }
-    mOccupancyGrid.data[y*mMapWidth + x] = value;
+    occupancy_grid_.data[y*map_width_ + x] = value;
     return true;
   }
 
   bool isFree(int x, int y) {
     signed char value = getData(x, y);
-    if ( value >= 0 && value < mLethalCost ) return true;
+    if ( value >= 0 && value < lethal_cost_ ) return true;
     return false;
   }
 
  private:
-  nav_msgs::OccupancyGrid mOccupancyGrid;
-  unsigned int mMapWidth;
-  unsigned int mMapHeight;
-  signed char mLethalCost;
+  nav_msgs::OccupancyGrid occupancy_grid_;
+  unsigned int map_width_;
+  unsigned int map_height_;
+  signed char lethal_cost_;
 };
 
 #endif  // end GRID_MAP_H_

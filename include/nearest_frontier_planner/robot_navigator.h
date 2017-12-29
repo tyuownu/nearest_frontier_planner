@@ -32,34 +32,32 @@ class RobotNavigator
   void mapCallback(const nav_msgs::OccupancyGrid& global_map);
 
  private:
-  bool isLocalized();
   bool setCurrentPosition();
   void stop();
   bool preparePlan();
 
   // Everything related to ROS
-  tf::TransformListener mTfListener;
-  ros::ServiceServer mStopServer;
-  ros::ServiceServer mPauseServer;
+  tf::TransformListener tf_listener_;
+  ros::ServiceServer stop_server_;
+  ros::ServiceServer pause_server_;
 
-  std::string mMapFrame;
-  std::string mRobotFrame;
-  std::string mExploreActionTopic;
+  std::string map_frame_;
+  std::string robot_frame_;
+  std::string explore_action_topic_;
 
-  ExploreActionServer* mExploreActionServer;
+  ExploreActionServer* explore_action_server_;
 
   // Current status and goals
-  bool mHasNewMap;
-  bool mIsPaused;
-  bool mIsStopped;
-  unsigned int mGoalPoint;
-  unsigned int mStartPoint;
-  double mUpdateFrequency;
+  bool has_new_map_;
+  bool is_paused_;
+  bool is_stopped_;
+  unsigned int goal_point_;
+  unsigned int start_point_;
+  double update_frequency_;
 
   // Everything related to the global map and plan
-  std::string mExplorationStrategy;
-  NearestFrontierPlanner mExplorationPlanner;
-  GridMap mCurrentMap;
+  NearestFrontierPlanner exploration_planner_;
+  GridMap current_map_;
 
   ros::Publisher goal_publisher_;
   ros::Subscriber map_sub_;

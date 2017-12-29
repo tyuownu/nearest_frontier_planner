@@ -9,17 +9,13 @@
 #include <nearest_frontier_planner/grid_map.h>
 
 
-class NearestFrontierPlanner
-{
-  public:
+class NearestFrontierPlanner {
+ public:
     NearestFrontierPlanner() {}
     ~NearestFrontierPlanner() {}
 
     int findExplorationTarget(GridMap* map, unsigned int start,
         unsigned int &goal);
-
-  private:
-
 };
 
 #endif  // NEAREST_FRONTIER_PLANNER_H_
