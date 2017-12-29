@@ -185,7 +185,7 @@ void RobotNavigator::mapCallback(const nav_msgs::OccupancyGrid& global_map) {
   if ( !has_new_map_ ) {
     // ROS_INFO(__func__);
     current_map_.update(global_map);
-    current_map_.setLethalCost(50);
+    current_map_.setLethalCost(80);
     has_new_map_ = true;
   }
 }
