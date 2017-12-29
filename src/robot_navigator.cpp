@@ -23,10 +23,10 @@ RobotNavigator::RobotNavigator() {
   navigatorNode.param("exploration_strategy", mExplorationStrategy,
       std::string("NearestFrontierPlanner"));
 
-  robotNode.param("map_frame", mMapFrame, std::string("map"));
-  robotNode.param("robot_frame", mRobotFrame, std::string("robot"));
-  robotNode.param("update_frequency", mUpdateFrequency, 1.0);
-  robotNode.param("explore_action_topic", mExploreActionTopic,
+  navigatorNode.param("map_frame", mMapFrame, std::string("map"));
+  navigatorNode.param("robot_frame", mRobotFrame, std::string("robot"));
+  navigatorNode.param("update_frequency", mUpdateFrequency, 1.0);
+  navigatorNode.param("explore_action_topic", mExploreActionTopic,
       std::string(NAV_EXPLORE_ACTION));
 
   // Apply tf_prefix to all used frame-id's
