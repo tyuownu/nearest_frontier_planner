@@ -2,6 +2,7 @@
 #include <actionlib/client/simple_action_client.h>
 #include <nearest_frontier_planner/ExploreAction.h>
 #include <std_srvs/Trigger.h>
+#include <geometry_msgs/Twist.h>
 
 #include <nearest_frontier_planner/commands.h>
 
@@ -11,6 +12,23 @@ ExploreClient* explore_client;
 
 bool receiveCommand(std_srvs::Trigger::Request &req,
     std_srvs::Trigger::Response &res) {
+  geometry_msgs::Twist cmd_vel;
+  ros::NodeHandle n;
+  ros::Publisher vel_pub;
+  ros::Rate r(10);
+  int t = 0;
+
+  vel_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 1);
+
+  while ( t++ < 80 && ros::ok() ) {
+    cmd_vel.linear.x = 0.0f;
+    cmd_vel.linear.y = 0.0f;
+    cmd_vel.angular.z = 0.2f;
+
+    vel_pub.publish(cmd_vel);
+    r.sleep();
+  }
+
   nearest_frontier_planner::ExploreGoal goal;
   explore_client->sendGoal(goal);
   res.success = true;
