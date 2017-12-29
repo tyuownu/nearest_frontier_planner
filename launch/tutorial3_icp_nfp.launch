@@ -3,6 +3,7 @@
   <rosparam file="$(find nearest_frontier_planner)/param/ros.yaml" />
 
 	<!-- Start the Navigator to move the robot autonomously -->
+  <param name="update_frequency" value="2"/>
 	<node name="Navigator" pkg="nearest_frontier_planner" type="nfp_navigator">
 	</node>
 

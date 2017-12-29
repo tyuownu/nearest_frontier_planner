@@ -54,6 +54,7 @@ class RobotNavigator
   bool mIsStopped;
   unsigned int mGoalPoint;
   unsigned int mStartPoint;
+  double mUpdateFrequency;
 
   // Everything related to the global map and plan
   std::string mExplorationStrategy;

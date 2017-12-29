@@ -5,7 +5,6 @@
 #include <set>
 #include <map>
 
-#define FREQUENCY 0.5
 
 using namespace ros;
 using namespace tf;
@@ -26,6 +25,7 @@ RobotNavigator::RobotNavigator() {
 
   robotNode.param("map_frame", mMapFrame, std::string("map"));
   robotNode.param("robot_frame", mRobotFrame, std::string("robot"));
+  robotNode.param("update_frequency", mUpdateFrequency, 1.0);
   robotNode.param("explore_action_topic", mExploreActionTopic,
       std::string(NAV_EXPLORE_ACTION));
 
@@ -89,7 +89,7 @@ void RobotNavigator::stop() {
 void RobotNavigator::receiveExploreGoal(
     const nearest_frontier_planner::ExploreGoal::ConstPtr &goal) {
   // ROS_INFO(__func__);
-  Rate loopRate(FREQUENCY);
+  Rate loopRate(mUpdateFrequency);
   while ( true ) {
     // Check if we are asked to preempt
     if ( !ok() || mExploreActionServer->isPreemptRequested() || mIsStopped ) {
@@ -153,9 +153,9 @@ void RobotNavigator::receiveExploreGoal(
     // Sleep remaining time
     spinOnce();
     loopRate.sleep();
-    if ( loopRate.cycleTime() > ros::Duration(1.0 / FREQUENCY) )
+    if ( loopRate.cycleTime() > ros::Duration(1.0 / mUpdateFrequency) )
       ROS_WARN("Missed desired rate of %.2fHz! Loop actually took %.4f seconds!",
-          FREQUENCY, loopRate.cycleTime().toSec());
+          mUpdateFrequency, loopRate.cycleTime().toSec());
   }
 }
 
