@@ -81,7 +81,6 @@ void RobotNavigator::stop() {
 
 void RobotNavigator::receiveExploreGoal(
     const nearest_frontier_planner::ExploreGoal::ConstPtr &goal) {
-  // ROS_INFO(__func__);
   ros::Rate loop_rate(update_frequency_);
   while ( true ) {
     // Check if we are asked to preempt
@@ -102,27 +101,27 @@ void RobotNavigator::receiveExploreGoal(
 
     goal_point_ = current_map_.getSize();
     if ( preparePlan() ) {
-      ROS_INFO("exploration: start = %u, end = %u.", start_point_, goal_point_);
+      ROS_DEBUG("exploration: start = %u, end = %u.", start_point_, goal_point_);
       int result = exploration_planner_.findExplorationTarget(&current_map_,
           start_point_, goal_point_);
-      ROS_INFO("exploration: start = %u, end = %u.", start_point_, goal_point_);
-      unsigned int x_index = 0, y_index = 0;
-      current_map_.getCoordinates(x_index, y_index, start_point_);
-      ROS_INFO("start: x = %u, y = %u", x_index, y_index);
+      ROS_DEBUG("exploration: start = %u, end = %u.", start_point_, goal_point_);
+      unsigned int x_start = 0, y_start = 0;
+      current_map_.getCoordinates(x_start, y_start, start_point_);
+      ROS_DEBUG("start: x = %u, y = %u", x_start, y_start);
       unsigned int x_stop = 0, y_stop = 0;
 
 
-      double x_ = x_index * current_map_.getResolution() +
+      double x_ = x_start * current_map_.getResolution() +
         current_map_.getOriginX();
-      double y_ = y_index * current_map_.getResolution() +
+      double y_ = y_start * current_map_.getResolution() +
         current_map_.getOriginY();
-      ROS_INFO("start: x = %f, y = %f", x_, y_);
+      ROS_DEBUG("start: x = %f, y = %f", x_, y_);
 
       double x, y;
       if ( goal_point_ == current_map_.getSize() ) {
-        x = x_index * current_map_.getResolution() +
+        x = x_start * current_map_.getResolution() +
           current_map_.getOriginX();
-        y = y_index * current_map_.getResolution() +
+        y = y_start * current_map_.getResolution() +
           current_map_.getOriginY();
       } else {
         current_map_.getCoordinates(x_stop, y_stop, goal_point_);
@@ -131,7 +130,7 @@ void RobotNavigator::receiveExploreGoal(
         y = y_stop * current_map_.getResolution() +
           current_map_.getOriginY();
       }
-      ROS_INFO("goal: x = %f, y = %f", x, y);
+      ROS_DEBUG("goal: x = %f, y = %f", x, y);
 
       geometry_msgs::PoseStamped goal_base;
       goal_base.header.stamp = ros::Time::now();
@@ -153,7 +152,6 @@ void RobotNavigator::receiveExploreGoal(
 }
 
 bool RobotNavigator::setCurrentPosition() {
-  // ROS_INFO(__func__);
   tf::StampedTransform transform;
   try {
     tf_listener_.lookupTransform(map_frame_, robot_frame_, ros::Time(0), transform);
@@ -183,7 +181,6 @@ bool RobotNavigator::setCurrentPosition() {
 
 void RobotNavigator::mapCallback(const nav_msgs::OccupancyGrid& global_map) {
   if ( !has_new_map_ ) {
-    // ROS_INFO(__func__);
     current_map_.update(global_map);
     current_map_.setLethalCost(80);
     has_new_map_ = true;
