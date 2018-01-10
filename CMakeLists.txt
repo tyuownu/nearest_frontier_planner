@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib_msgs
   geometry_msgs
   move_base_msgs
+  sensor_msgs
 )
 
 ################################################

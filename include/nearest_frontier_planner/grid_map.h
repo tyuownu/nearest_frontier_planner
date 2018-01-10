@@ -144,6 +144,14 @@ class GridMap {
     return false;
   }
 
+  float getBoundaryX() {
+    return getOriginX() + getWidth() * getResolution();
+  }
+
+  float getBoundaryY() {
+    return getOriginY() + getHeight() * getResolution();
+  }
+
  private:
   nav_msgs::OccupancyGrid occupancy_grid_;
   unsigned int map_width_;

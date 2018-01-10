@@ -2,6 +2,7 @@
 #define ROBOT_NAVIGATOR_H_
 #include <ros/ros.h>
 #include <std_srvs/Trigger.h>
+#include <sensor_msgs/LaserScan.h>
 #include <tf/transform_listener.h>
 #include <actionlib/server/simple_action_server.h>
 #include <actionlib/client/simple_action_client.h>
@@ -30,6 +31,8 @@ class RobotNavigator
   void receiveExploreGoal(
       const nearest_frontier_planner::ExploreGoal::ConstPtr &goal);
   void mapCallback(const nav_msgs::OccupancyGrid& global_map);
+  void scanCallback(const sensor_msgs::LaserScan& scan);
+  int scoreLine(double, double);
 
  private:
   bool setCurrentPosition();
@@ -55,11 +58,15 @@ class RobotNavigator
   unsigned int start_point_;
   double update_frequency_;
 
+  double longest_distance_;
+  double angles_;
+
   // Everything related to the global map and plan
   NearestFrontierPlanner exploration_planner_;
   GridMap current_map_;
 
   ros::Publisher goal_publisher_;
   ros::Subscriber map_sub_;
+  ros::Subscriber scan_sub_;
 };
 #endif  // end ROBOT_NAVIGATOR_H_
