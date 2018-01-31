@@ -125,7 +125,7 @@ class GridMap {
   // Coordinate based methods
   signed char getData(int x, int y) {
     if ( x < 0 ||x >= (int)map_width_ || y < 0 || y >= (int)map_height_ )
-      return -1;
+      return 100;
     else
       return occupancy_grid_.data[y*map_width_ + x];
   }
