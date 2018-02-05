@@ -18,12 +18,12 @@ bool receiveCommand(std_srvs::Trigger::Request &req,
   ros::Rate r(10);
   int t = 0;
 
-  vel_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 1);
+  vel_pub = n.advertise<geometry_msgs::Twist>("/cmd_vel", 100);
 
-  while ( t++ < 80 && ros::ok() ) {
+  while ( t++ < 32 && ros::ok() ) {
     cmd_vel.linear.x = 0.0f;
     cmd_vel.linear.y = 0.0f;
-    cmd_vel.angular.z = 0.2f;
+    cmd_vel.angular.z = 0.5f;
 
     vel_pub.publish(cmd_vel);
     r.sleep();
