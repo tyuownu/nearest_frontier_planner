@@ -12,6 +12,7 @@ ExploreClient* explore_client;
 
 bool receiveCommand(std_srvs::Trigger::Request &req,
     std_srvs::Trigger::Response &res) {
+  /*
   geometry_msgs::Twist cmd_vel;
   ros::NodeHandle n;
   ros::Publisher vel_pub;
@@ -28,6 +29,7 @@ bool receiveCommand(std_srvs::Trigger::Request &req,
     vel_pub.publish(cmd_vel);
     r.sleep();
   }
+  */
 
   nearest_frontier_planner::ExploreGoal goal;
   explore_client->sendGoal(goal);
