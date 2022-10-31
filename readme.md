@@ -17,6 +17,6 @@ The example show how to use the package, you need to install the packages below:
 
 ``` bash
 roslaunch navigation_stage move_base_icpslam_5cm.launch
-roslaunch nearest_frontier_planner tutorial3_icp_nfp.launch
+roslaunch nearest_frontier_planner nearest_frontier_planner.launch
 rosservice call /StartExploration
 ```
